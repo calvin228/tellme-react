@@ -1,0 +1,224 @@
+// // Fonts
+@import url("https://fonts.googleapis.com/css?family=Nunito");
+
+// // Variables
+// @import 'variables';
+
+// #app{
+//   // font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+// }
+
+// .navbar-laravel {
+//   background-color: #fff;
+//   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+// }
+
+// a.remove-default{
+//   color: black;
+//   &:hover{
+//     color:black;
+//     text-decoration: none;
+//   }
+// }
+
+// .is-horizontal-center{
+//   justify-content: center;
+// }
+
+// .grid {
+// 	display: grid;
+// 	grid-template-columns: [xl-start] 1fr 1.5rem [md-start] minmax(0, 624px) [md-end] 1.5rem 1fr [xl-end];
+// }
+
+// .grid * { grid-column: md;}
+
+// .is-paddingless-horizontal {
+// 	padding-left: 0;
+// 	padding-right: 0;
+// }
+
+// .border-bottom{
+// 	border-bottom: 1px solid grey;
+// }
+
+// .black{
+// 	background-color: black;
+// }
+
+// .content ul.list-group{
+// 	list-style: none;
+// 	margin: 0;
+// }
+
+// .margin-bottom{
+// 	margin-bottom: 10px;
+// }
+
+@import "~bulma/sass/utilities/initial-variables";
+@import "~bulma/sass/utilities/functions";
+
+@import "_variables.scss";
+
+@import "~bulma/sass/utilities/derived-variables";
+
+@import "~bulma/bulma.sass";
+.navbar-item img {
+    max-height: 2.75rem;
+}
+// @import "~bulma-extensions/bulma-divider/src/sass/index";
+html {
+    font-size: 15px;
+}
+#app {
+    background: #f7f7f7;
+}
+
+hr {
+    background-color: #dcdcdc !important;
+}
+
+.between-line {
+    width: 100%;
+    height: 20px;
+    border-bottom: 1px solid #c0bdbd;
+    text-align: center;
+}
+
+.between-line span {
+    font-size: 22px;
+    background-color: #f7f7f7;
+    padding: 0 10px;
+}
+
+.is-small-radius {
+    border-radius: 10px;
+}
+
+.columns.is-reverse-mobile {
+    @media only screen and (max-width: 768px) {
+        flex-direction: column-reverse;
+        display: flex;
+        .column {
+            width: 100%;
+        }
+    }
+}
+
+.text-primary-color {
+    color: #0bbcd3;
+}
+
+.scrollable-medium {
+    overflow-y: scroll;
+    height: 31vw;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.scrollable {
+    overflow-y: auto;
+    max-height: 100%;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.is-margin-bottom-small {
+    margin-bottom: 10px;
+}
+
+html,
+body {
+    margin: 0;
+    height: 100%;
+    // overflow: hidden;
+}
+
+.reduce-mg-top-30 {
+    margin-top: -30px;
+}
+
+.padding-small {
+    padding: 1.5vw;
+}
+.padding-small-2 {
+    padding: 2vw;
+}
+
+.margin-small {
+    margin: 1vw;
+}
+
+.mg-top-2 {
+    margin-top: 1vh;
+}
+.mg-top-4 {
+    margin-top: 4vh;
+}
+
+.mg-right-1 {
+    margin-right: 1vh;
+}
+
+.mg-right-2 {
+    margin-right: 2vh;
+}
+
+.card-border-bottom {
+    border-bottom: 1px solid #dbdbdb;
+}
+
+.pointer {
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.img-rounded{
+    border-radius: 50px;
+}
+
+a.navbar-item.active{
+    // background: $primaryDarken;
+    color: black !important;
+    font-weight: bold;
+}
+
+.editor-wrap{
+    border: 1px solid black;
+    word-wrap: break-word;
+    word-break: break-all;
+    overflow-wrap: break-word;
+}
+
+.is-secondary{
+    background: $secondary;
+    color: white;
+    border: none;
+    &:hover{
+        background: $secondaryDarken;
+        color: white;
+
+    }
+    &:focus{
+        background: $secondaryDarken;
+        color: white;
+        // border-color: $secondaryDarken;
+        // outline-color: $secondaryDarken;
+    }
+}
+
+.break-line{
+    white-space: pre-line;
+}
+
+a.text-black{
+    color: black;
+}
+
+.hover-grey{
+    &:hover{
+        background:#f3f2f2;
+    }
+}

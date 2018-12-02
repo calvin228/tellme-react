@@ -65,7 +65,10 @@ class TopicController extends Controller
      */
     public function show($id)
     {
-        //
+    
+        $topic = Topic::where('id',$id)->with('user')->get();
+
+        return response()->json(["topic"=>$topic], 200);
     }
 
     /**

@@ -19,6 +19,6 @@ class Topic extends Model
     }
 
     public function post(){
-        return $this->belongsTo('App\Post');
+        return $this->hasMany('App\Post');
     }
 }

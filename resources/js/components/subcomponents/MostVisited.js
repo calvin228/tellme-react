@@ -48,7 +48,7 @@ const MostVisited = props => {
                             ["visit_count"],
                             ["desc"]
                         ).map(story => {
-                            return <MostVisitedItem story={story} />;
+                            return <MostVisitedItem key={story.id} story={story} />;
                         })}
                     </div>
                 </div>
@@ -62,7 +62,7 @@ const MostVisited = props => {
                             ["visit_count"],
                             ["desc"]
                         ).map(story => {
-                            return <MostVisitedItem story={story} />;
+                            return <MostVisitedItem key={story.id} story={story} />;
                         })}
                     </div>
                 </div>

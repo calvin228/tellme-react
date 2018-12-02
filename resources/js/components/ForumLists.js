@@ -1,51 +1,41 @@
 import React, { Component } from "react";
 import ListAuthorInfo from "./subcomponents/ListAuthorInfo";
 import { Link } from "react-router-dom";
-import Truncate from "./subcomponents/Truncate";
 
 const ForumContent = props => {
     return (
         <div className="content">
-            <div className="columns">
-                <div className="column">
-                    <p>
-                        <strong>{props.topic.subject}</strong>
-                        <br />
-                    
-                        <br />
-                        {/* <Link
-                            to={{
-                                pathname: `/stories/${props.topic.id}`,
-                                state: {
-                                    story: props.story
-                                }
-                            }}
-                            // to={}
-                            className="has-text-primary"
-                        >
-                            See more...
-                        </Link> */}
-                    </p>
-                </div>
-                <div className="column is-one-fifth">
-                    <p />
-                </div>
-            </div>
+            <p>
+                <strong>{props.topic.subject}</strong>
+                <br />
+            </p>
         </div>
     );
 };
 
+const Footer = () => {
+    return (
+        <footer className="card-footer">
+            <span className="card-footer-item">
+                <p>View Topic</p>
+            </span>
+        </footer>
+    );
+};
 const ForumList = props => {
-    console.log(props.topic);
     return (
         <div className="card is-small-radius is-margin-bottom-small">
-            <div className="card-content padding-small">
-                {/* <ListAuthorInfo
-                    hasLike={false}
-                    author={props.topic.user}
-                    countComment={props.topic.comment.length}
-                /> */}
-                <ForumContent topic={props.topic} />
+            <div className="card-content padding-none">
+                <div className="padding-small">
+                    <ListAuthorInfo
+                        hasLike={false}
+                        author={props.topic.user}
+                        countComment={0}
+                    />
+                    <ForumContent topic={props.topic} />
+                </div>
+                <Footer />
+                
             </div>
         </div>
     );

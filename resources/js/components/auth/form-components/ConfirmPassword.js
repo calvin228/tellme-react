@@ -10,7 +10,7 @@ const ConfirmPassword = props => {
                     className="input is-medium"
                     type="password"
                     placeholder="Confirm Password"
-                    onChange={this.handleFieldChange}
+                    onChange={props.handleFieldChange}
                 />
                 <span className="icon is-small is-left">
                     <FontAwesomeIcon icon="lock" />

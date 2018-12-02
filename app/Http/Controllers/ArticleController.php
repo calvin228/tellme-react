@@ -116,10 +116,10 @@ class ArticleController extends Controller
         $article = Article::where('slug', $slug)->with('category','user')->get();
         Article::where('slug',$slug)->increment('visit_count');
         if (count($article) == 0){
-            
             return response()->json(['message' => 'Story not found'], 404);
         }
-        return $article;
+
+        return response()->json(['article'=>$article, 'current_user' => auth()->user()], 200);
     }
 
     public function getCategory($id){

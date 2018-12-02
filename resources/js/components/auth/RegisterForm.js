@@ -52,7 +52,7 @@ export default class RegisterForm extends Component {
         axios
             .post("/api/register", data)
             .then(response => {
-                console.log(response);
+                this.props.history.push("/login");
             })
             .catch(error => {
                 console.log(error);
@@ -83,7 +83,7 @@ export default class RegisterForm extends Component {
                                 />
                                 <span className="file-cta">
                                     <span className="file-icon">
-                                        <FontAwesomeIcon icon="faUpload" />
+                                        <FontAwesomeIcon icon="upload" />
                                     </span>
                                     <span className="file-label">
                                         Choose a picture...

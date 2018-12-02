@@ -3,7 +3,7 @@ import PageWrapper from "./PageWrapper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Comment = props => {
-    const { comment } = props;
+    const { comment, currentUser } = props;
     return (
         <Fragment>
             <div className="margin-small">
@@ -28,7 +28,7 @@ const Comment = props => {
                     </div>
                     <div className="media-right">
                         {comment ? (
-                            comment.user_id === comment.user.id ? (
+                            comment.user_id === currentUser.id ? (
                                 <button
                                     className="delete"
                                     onClick={() =>
@@ -60,7 +60,8 @@ export default class StoryDetail extends Component {
             comment: "",
             comments: [],
             story: "",
-            liked: ""
+            liked: "",
+            current_user: {}
         };
         this.handleSaveComment = this.handleSaveComment.bind(this);
         this.handleDeleteComment = this.handleDeleteComment.bind(this);
@@ -97,10 +98,18 @@ export default class StoryDetail extends Component {
     }
     fetchStory() {
         axios
-            .get(`/api/articles/${this.props.match.params.slug}`)
+            .get(`/api/articles/${this.props.match.params.slug}`, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem(
+                        "jwtToken"
+                    )}`
+                }
+            })
             .then(response => {
+
                 this.setState({
-                    story: response.data[0]
+                    story: response.data.article[0],
+                    current_user: response.data.current_user
                 });
                 this.fetchLike();
             });
@@ -197,18 +206,14 @@ export default class StoryDetail extends Component {
                     )}`
                 }
             })
-            .then(response => {
-                this.fetchComments();
-            })
-            .catch(error => {
-                console.log(error);
-            });
+            .then(this.fetchComments())
+            .catch(error => console.log(error));
     }
     handleOnFocusTextArea() {
         document.getElementById("comment").focus();
     }
     render() {
-        const { story } = this.state;
+        const { story, current_user } = this.state;
         return (
             <PageWrapper>
                 <div className="card">
@@ -239,14 +244,13 @@ export default class StoryDetail extends Component {
                                 </p>
                             </div>
                             <div className="media-right">
+                                
                                 {story ? (
-                                    story.user_id === story.user.id ? (
+                                    story.user_id === current_user.id ? (
                                         <button
                                             onClick={this.handleDeleteArticle}
-                                            className="button is-danger"
-                                        >
-                                            Delete
-                                        </button>
+                                            className="delete"
+                                        />
                                     ) : (
                                         ""
                                     )
@@ -335,6 +339,7 @@ export default class StoryDetail extends Component {
                                     className="is-padding-small"
                                     comment={comment}
                                     deleteComment={this.handleDeleteComment}
+                                    currentUser={this.state.current_user}
                                 />
                             );
                         })}

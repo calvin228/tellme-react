@@ -39,7 +39,7 @@ Route::put('articles/edit/{slug}', 'ArticleController@update');
 Route::delete('articles/delete/{id}', 'ArticleController@destroy')->middleware('auth:api');
 Route::post('articles/draft/create', 'ArticleController@createDraft');
 Route::put('articles/draft/edit/{id}', 'ArticleController@editDraft');
-Route::get('articles/{slug}', 'ArticleController@show');
+Route::get('articles/{slug}', 'ArticleController@show')->middleware('auth:api');
 
 // Category Route
 Route::get('categories', 'CategoryController@index');
@@ -63,6 +63,7 @@ Route::get('like/{slug}/count', "LikeController@countLike");
 
 Route::get('topics', "TopicController@index");
 Route::post('topic/create', "TopicController@store")->middleware('auth:api');
+Route::get('topics/{id}', "TopicController@show");
 
 Route::get('posts/{topic_id}', "PostController@index");
 Route::post('post/{topic_id}/create/', "PostController@store")->middleware('auth:api'); // why doesnt accept param topic id?

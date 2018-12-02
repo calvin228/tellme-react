@@ -15,6 +15,7 @@ import Userpage from "./Userpage";
 import StoryDetail from "./StoryDetail";
 import PrivateRoute from "../hoc/PrivateRoute";
 import HomeForum from "./HomeForum";
+import ForumDetail from "./ForumDetail";
 // import "../../sass/debug.scss";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -74,7 +75,8 @@ export default class App extends Component {
                                 path="/stories/:slug"
                                 component={StoryDetail}
                             />
-                            <Route path="/forum" component={HomeForum}/>
+                            <Route path="/forum/:id" component={ForumDetail} />
+                            <Route exact path="/forum" component={HomeForum}/>
                         </ScrollToTop>
                     </Switch>
                 </Fragment>

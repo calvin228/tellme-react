@@ -33,8 +33,12 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->profile_image = $imageName;
+        $user->description = "";
+        $user->slug = str_slug($request->name)."-".uniqid();
         $user->save();
 
+
+    
         // var_dump($request->file('profile_image'));
 
         return response()->json([
@@ -71,8 +75,6 @@ class UserController extends Controller
     {
         if (Auth::check()) {
             return response()->json(['user' => auth()->user()], 200);
-        } else {
-            return response()->json(['message' => "Unauthorized"], 401);
         }
 
     }

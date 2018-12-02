@@ -16,7 +16,7 @@ class PostController extends Controller
      */
     public function index($topic_id)
     {
-        $posts = Post::where('topic_id', $topic_id)->with('topic')->get();
+        $posts = Post::where('topic_id', $topic_id)->with('user')->get();
         return response()->json($posts, 200);
     }
 

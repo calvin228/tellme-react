@@ -15,6 +15,6 @@ class Post extends Model
     }
 
     public function topic(){
-        return $this->hasOne('App\Topic', 'topic_id');
+        return $this->belongsTo('App\Topic', 'topic_id');
     }
 }

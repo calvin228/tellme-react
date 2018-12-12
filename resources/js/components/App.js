@@ -16,26 +16,27 @@ import StoryDetail from "./StoryDetail";
 import PrivateRoute from "../hoc/PrivateRoute";
 import HomeForum from "./HomeForum";
 import ForumDetail from "./ForumDetail";
+import About from "./About";
+import EditProfile from "./EditProfile";
+import Navbar from "./Navbar";
+import "bulma-modal-fx/dist/css/modal-fx.min.css"
 // import "../../sass/debug.scss";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-    faEnvelope,
-    faLock,
-    faUser,
-    faUpload,
-    faThumbsUp,
-    faComment,
-    faSearch
-} from "@fortawesome/free-solid-svg-icons";
+import * as fa from "@fortawesome/free-solid-svg-icons";
+import SearchResult from "./SearchResult";
+
+
 library.add(
-    faEnvelope,
-    faLock,
-    faUser,
-    faUpload,
-    faThumbsUp,
-    faComment,
-    faSearch
+    fa.faEnvelope,
+    fa.faLock,
+    fa.faUser,
+    fa.faUpload,
+    fa.faThumbsUp,
+    fa.faComment,
+    fa.faSearch,
+    fa.faEdit,
+    fa.faTrash
 );
 
 export default class App extends Component {
@@ -49,34 +50,34 @@ export default class App extends Component {
                 <Fragment>
                     <Switch>
                         <ScrollToTop>
+                            <Route path="/login" component={LoginForm} />
+                            <Route path="/register" component={RegisterForm} />
                             <PrivateRoute exact path="/" component={Home} />
                             <PrivateRoute
                                 path="/articles/create"
                                 component={CreateArticle}
                                 exact
                             />
-                            <Route
+                            <PrivateRoute
                                 path="/articles/:slug/edit"
                                 component={EditArticle}
                             />
-                            <Route
+                            <PrivateRoute
                                 path="/articles/:slug"
                                 component={SingleArticle}
                             />
-                            <Route path="/articles" component={ArticleLists} />
-                            <Route
-                                path="/category/add"
-                                component={AddCategory}
-                            />
-                            <Route path="/login" component={LoginForm} />
-                            <Route path="/register" component={RegisterForm} />
-                            <Route path="/profile/:slug" component={Userpage} />
-                            <Route
+                            <PrivateRoute path="/articles" component={ArticleLists} />
+                            
+                            <PrivateRoute path="/profile/:slug" component={Userpage} />
+                            <PrivateRoute exact path="/me/edit" component={EditProfile} />
+                            <PrivateRoute
                                 path="/stories/:slug"
                                 component={StoryDetail}
                             />
-                            <Route path="/forum/:id" component={ForumDetail} />
-                            <Route exact path="/forum" component={HomeForum}/>
+                            <PrivateRoute path="/about" component={About}/>
+                            <PrivateRoute path="/forum/:id" component={ForumDetail} />
+                            <PrivateRoute exact path="/forum" component={HomeForum}/>
+                            <PrivateRoute path ="/search" component={SearchResult}/>
                         </ScrollToTop>
                     </Switch>
                 </Fragment>

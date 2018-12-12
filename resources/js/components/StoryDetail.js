@@ -1,56 +1,157 @@
 import React, { Component, Fragment } from "react";
 import PageWrapper from "./PageWrapper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import TextAreaField from "./subcomponents/TextAreaField";
+import CurrentUser from "./subcomponents/CurrentUser";
+import ButtonCreate from "./subcomponents/ButtonCreate";
+import InputField from "./subcomponents/InputField";
+import ModalEdit from "./subcomponents/ModalEdit";
 
-const Comment = props => {
-    const { comment, currentUser } = props;
-    return (
-        <Fragment>
-            <div className="margin-small">
-                <div className="media">
-                    <div className="media-left">
-                        <figure className="image is-48x48">
-                            <img
-                                className="is-rounded"
-                                src={`/api/image/profile/${
-                                    comment.user.profile_image
-                                }`}
-                            />
-                        </figure>
-                    </div>
-                    <div className="media-content">
-                        <p>
-                            <strong>{comment.user.name}</strong>
-                        </p>
-                        <p className="has-text-grey">
-                            {comment.user.description}
-                        </p>
-                    </div>
-                    <div className="media-right">
-                        {comment ? (
-                            comment.user_id === currentUser.id ? (
-                                <button
-                                    className="delete"
-                                    onClick={() =>
-                                        props.deleteComment(comment.id)
-                                    }
+class Comment extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isActive: false,
+            comment: props.comment.comment,
+            isLoading: false
+        };
+
+        this.handleToggleModal = this.handleToggleModal.bind(this);
+        this.handleFieldChange = this.handleFieldChange.bind(this);
+
+    }
+    handleToggleModal() {
+        this.setState({
+            isActive: !this.state.isActive
+        });
+    }
+    
+    handleFieldChange(event) {
+        this.setState({
+            comment: event.target.value
+        });
+    }
+    render() {
+        const { comment, currentUser } = this.props;
+        return (
+            <Fragment>
+                <ModalEdit
+                    key={comment.id}
+                    id={comment.id}
+                    isActive={this.state.isActive}
+                    toggleModal={this.handleToggleModal}
+                    currentUser={currentUser}
+                    content={this.state.comment}
+                    fieldChange={this.handleFieldChange}
+                    update={this.props.updateComment}
+                />
+                <div className="margin-small">
+                    <div className="media">
+                        <div className="media-left">
+                            <figure className="image is-48x48">
+                                <img
+                                    className="is-rounded"
+                                    src={`/api/image/profile/${
+                                        comment.user.profile_image
+                                    }`}
                                 />
+                            </figure>
+                        </div>
+                        <div className="media-content">
+                            <p>
+                                <strong>{comment.user.name}</strong>
+                            </p>
+                            <p className="has-text-grey">
+                                {comment.user.description}
+                            </p>
+                        </div>
+                        <div className="media-right">
+                            {comment ? (
+                                comment.user_id === currentUser.id ? (
+                                    <Fragment>
+                                        <span
+                                            onClick={this.handleToggleModal}
+                                            className="hover-primary pointer tooltip"
+                                            data-tooltip="Edit"
+                                        >
+                                            <FontAwesomeIcon
+                                                icon="edit"
+                                                size="lg"
+                                            />
+                                        </span>
+                                        <span
+                                            onClick={() =>
+                                                this.props.deleteComment(
+                                                    comment.id
+                                                )
+                                            }
+                                            className="hover-primary pointer tooltip"
+                                            data-tooltip="Delete"
+                                        >
+                                            <FontAwesomeIcon
+                                                icon="trash"
+                                                size="lg"
+                                            />
+                                        </span>
+                                    </Fragment>
+                                ) : (
+                                    ""
+                                )
                             ) : (
                                 ""
-                            )
-                        ) : (
-                            ""
-                        )}
+                            )}
+                        </div>
+                    </div>
+                    <div className="card-border-bottom is-marginless">
+                        <p className="break-line">
+                            {comment.comment}
+                            <br />
+                        </p>
                     </div>
                 </div>
-                <div className="card-border-bottom is-marginless">
-                    <p className="break-line">
-                        {props.comment.comment}
-                        <br />
-                    </p>
+            </Fragment>
+        );
+    }
+}
+
+
+const ModalEditStory = props => {
+    const { isActive, toggleModal, currentUser, title, body } = props;
+    return (
+        <div className={`modal${isActive ? " is-active" : ""}`}>
+            <div className="modal-background" onClick={toggleModal} />
+            <div className="modal-content">
+                <div className="box">
+                    <CurrentUser user={currentUser} />
+                    <hr />
+                    <form onSubmit={event => props.updateStory(event)}>
+                        <InputField
+                            label="Title"
+                            type="text"
+                            name="title"
+                            onChange={props.fieldChange}
+                            value={title}
+                        />
+                        <TextAreaField
+                            label="Body"
+                            name="body"
+                            onChange={props.fieldChange}
+                            value={body}
+                        />
+                        <ButtonCreate
+                            type="submit"
+                            name="Update"
+                            color="is-primary"
+                        />
+                    </form>
                 </div>
             </div>
-        </Fragment>
+            <button
+                className="modal-close is-large"
+                onClick={toggleModal}
+                aria-label="close"
+            />
+        </div>
     );
 };
 export default class StoryDetail extends Component {
@@ -61,7 +162,11 @@ export default class StoryDetail extends Component {
             comments: [],
             story: "",
             liked: "",
-            current_user: {}
+            current_user: {},
+            title: "",
+            body: "",
+            isActive: false,
+            isLoading: false
         };
         this.handleSaveComment = this.handleSaveComment.bind(this);
         this.handleDeleteComment = this.handleDeleteComment.bind(this);
@@ -69,8 +174,50 @@ export default class StoryDetail extends Component {
         this.handleToggleLike = this.handleToggleLike.bind(this);
         this.handleDeleteArticle = this.handleDeleteArticle.bind(this);
         this.handleOnFocusTextArea = this.handleOnFocusTextArea.bind(this);
+        this.handleUpdateComment = this.handleUpdateComment.bind(this);
+        this.handleToggleModal = this.handleToggleModal.bind(this);
+        this.handleUpdateStory = this.handleUpdateStory.bind(this);
+        this.handleToggleLoading = this.handleToggleLoading.bind(this);
     }
 
+    handleToggleLoading(){
+        this.setState({
+            isLoading: !this.state.isLoading
+        })
+    }
+    handleUpdateStory(event) {
+        event.preventDefault();
+        const data = {
+            title: this.state.title,
+            body: this.state.body,
+            _method: "PUT"
+        };
+        axios
+            .post(
+                `/api/articles/${this.props.match.params.slug}/update`,
+                data,
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem(
+                            "jwtToken"
+                        )}`
+                    }
+                }
+            )
+            .then(response => {
+                this.fetchStory();
+                this.handleToggleModal();
+            })
+            .catch(error => {
+                console.log(error);
+                this.handleToggleModal();
+            });
+    }
+    handleToggleModal() {
+        this.setState({
+            isActive: !this.state.isActive
+        });
+    }
     handleDeleteArticle() {
         axios
             .delete(`/api/articles/delete/${this.state.story.id}`, {
@@ -106,11 +253,14 @@ export default class StoryDetail extends Component {
                 }
             })
             .then(response => {
-
+                const { article } = response.data;
                 this.setState({
-                    story: response.data.article[0],
-                    current_user: response.data.current_user
+                    story: article[0],
+                    current_user: response.data.current_user,
+                    title: article[0].title,
+                    body: article[0].body
                 });
+                document.title = this.state.story.title + " - TellMe";
                 this.fetchLike();
             });
     }
@@ -184,6 +334,7 @@ export default class StoryDetail extends Component {
             story_slug: this.props.match.params.slug,
             story_id: this.state.story.id
         };
+        this.handleToggleLoading();
         axios
             .post("/api/comment/create", data, {
                 headers: {
@@ -193,6 +344,7 @@ export default class StoryDetail extends Component {
                 }
             })
             .then(response => {
+                this.handleToggleLoading();
                 this.fetchComments();
                 this.handleResetField();
             });
@@ -209,13 +361,45 @@ export default class StoryDetail extends Component {
             .then(this.fetchComments())
             .catch(error => console.log(error));
     }
+    handleUpdateComment(event, id, comment, callback) {
+        event.preventDefault();
+        const data = {
+            comment,
+            _method: "PUT"
+        };
+        axios
+            .post(`/api/comment/${id}/update`, data, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem(
+                        "jwtToken"
+                    )}`
+                }
+            })
+            .then(response => {
+                this.fetchComments();
+                callback();
+            })
+            .catch(error => {
+                console.log(error);
+                callback();
+            });
+    }
     handleOnFocusTextArea() {
         document.getElementById("comment").focus();
     }
     render() {
-        const { story, current_user } = this.state;
+        const { story, current_user, isActive, title, body } = this.state;
         return (
             <PageWrapper>
+                <ModalEditStory
+                    isActive={isActive}
+                    currentUser={current_user}
+                    toggleModal={this.handleToggleModal}
+                    title={title}
+                    body={body}
+                    fieldChange={this.handleFieldChange}
+                    updateStory={this.handleUpdateStory}
+                />
                 <div className="card">
                     <div className="card-content">
                         <div className="media">
@@ -244,13 +428,32 @@ export default class StoryDetail extends Component {
                                 </p>
                             </div>
                             <div className="media-right">
-                                
                                 {story ? (
                                     story.user_id === current_user.id ? (
-                                        <button
-                                            onClick={this.handleDeleteArticle}
-                                            className="delete"
-                                        />
+                                        <Fragment>
+                                            <span
+                                                onClick={this.handleToggleModal}
+                                                className="hover-primary pointer tooltip"
+                                                data-tooltip="Edit"
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon="edit"
+                                                    size="lg"
+                                                />
+                                            </span>
+                                            <span
+                                                className="hover-primary pointer tooltip"
+                                                data-tooltip="Delete"
+                                                onClick={
+                                                    this.handleDeleteArticle
+                                                }
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon="trash"
+                                                    size="lg"
+                                                />
+                                            </span>
+                                        </Fragment>
                                     ) : (
                                         ""
                                     )
@@ -335,12 +538,16 @@ export default class StoryDetail extends Component {
                         <hr className="is-marginless" />
                         {this.state.comments.map(comment => {
                             return (
-                                <Comment
-                                    className="is-padding-small"
-                                    comment={comment}
-                                    deleteComment={this.handleDeleteComment}
-                                    currentUser={this.state.current_user}
-                                />
+                                <Fragment key={comment.id}>
+                                    <Comment
+                                        key={comment.id}
+                                        className="is-padding-small"
+                                        comment={comment}
+                                        deleteComment={this.handleDeleteComment}
+                                        currentUser={this.state.current_user}
+                                        updateComment={this.handleUpdateComment}
+                                    />
+                                </Fragment>
                             );
                         })}
                     </div>

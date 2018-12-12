@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ListAuthorInfo from "./subcomponents/ListAuthorInfo";
 import { Link } from "react-router-dom";
+import PageTitle from "./PageTitle";
 
 const ForumContent = props => {
     return (
@@ -13,13 +14,15 @@ const ForumContent = props => {
     );
 };
 
-const Footer = () => {
+const Footer = props => {
     return (
-        <footer className="card-footer">
-            <span className="card-footer-item">
-                <p>View Topic</p>
-            </span>
-        </footer>
+        <Link to={`/forum/${props.id}`}>
+            <footer className="card-footer">
+                <span className="card-footer-item hover-grey pointer">
+                    View Topic
+                </span>
+            </footer>
+        </Link>
     );
 };
 const ForumList = props => {
@@ -30,12 +33,11 @@ const ForumList = props => {
                     <ListAuthorInfo
                         hasLike={false}
                         author={props.topic.user}
-                        countComment={0}
+                        countComment={props.topic.post.length-1}
                     />
                     <ForumContent topic={props.topic} />
                 </div>
-                <Footer />
-                
+                <Footer id={props.topic.id} />
             </div>
         </div>
     );
@@ -44,6 +46,7 @@ const ForumList = props => {
 const ForumLists = props => {
     return (
         <div>
+            <PageTitle title="Forum - TellMe"/>
             {props.topics.map(topic => {
                 return <ForumList key={topic.id} topic={topic} />;
             })}

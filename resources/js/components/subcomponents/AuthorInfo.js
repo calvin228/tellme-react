@@ -1,7 +1,8 @@
-import React from "react";
+import React, { Fragment } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const AuthorInfo = props => {
-    const { data } = props;
+    const { data, currentUser } = props;
     return data.hasOwnProperty("id") ? (
         <div className="media">
             <div className="media-left">
@@ -27,14 +28,26 @@ const AuthorInfo = props => {
                 </p>
             </div>
             <div className="media-right">
-                {/* EDIT THIS ONE */}
-                {data.user_id === data.user.id ? (
-                    <button
-                        // onClick={props.handleDelete}
-                        className="delete"
-                    >
-                        {/* Delete */}
-                    </button>
+                {data.user_id === currentUser.id ? (
+                    <Fragment>
+                        <span
+                            onClick={props.handleToggleModal}
+                            className="hover-primary pointer tooltip"
+                            data-tooltip="Edit"
+                        >
+                            <FontAwesomeIcon
+                                icon="edit"
+                                size="lg"
+                            />
+                        </span>
+                        <span
+                            className="hover-primary pointer tooltip"
+                            data-tooltip="Delete"
+                            onClick={props.handleDelete}
+                        >
+                            <FontAwesomeIcon icon="trash" size="lg" />
+                        </span>
+                    </Fragment>
                 ) : (
                     ""
                 )}

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddCategoryTable extends Migration
+class AddVisitCountToTopic extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddCategoryTable extends Migration
      */
     public function up()
     {
-        Schema::table('articles', function (Blueprint $table) {
-            $table->integer('category_id');
+        Schema::table('topics', function (Blueprint $table) {
+            $table->integer("visit_count");
         });
     }
 
@@ -25,8 +25,8 @@ class AddCategoryTable extends Migration
      */
     public function down()
     {
-        Schema::table('articles', function (Blueprint $table) {
-            $table->dropColumn('category_id');
+        Schema::table('topics', function (Blueprint $table) {
+            $table->dropColumn("visit_count");
         });
     }
 }

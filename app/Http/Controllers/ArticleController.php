@@ -20,7 +20,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = Article::where('is_draft', 0)->with('category','user','comment', 'like')->orderBy('created_at', 'desc')->get();
+        $articles = Article::where('is_draft', 0)->with('user','comment', 'like')->orderBy('created_at', 'desc')->get();
         return response()->json($articles, 200);
     }
 
@@ -41,13 +41,17 @@ class ArticleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+    public function examplepage(){
+        return view('page');
+    }
+
     public function store(Request $request)
     {
         if (Auth::check()){
             $this->validate($request, [
                 'title' => 'required',
                 'body' => 'required',
-                'category_id' => 'required',
                 'cover_image' => 'image|nullable|max:1999'
             ]);
 
@@ -63,7 +67,6 @@ class ArticleController extends Controller
             $article->title = $request->title;
             $article->body = $request->body;
             $article->slug = $slug;
-            $article->category_id = $request->category_id;
             $article->cover_image = $image_name;
             $article->is_draft = 0; // 0 = False , 1 = True
             $article->user_id = Auth::user()->id;
@@ -97,7 +100,6 @@ class ArticleController extends Controller
         $article->title = $request->title;
         $article->body = $request->body;
         $article->slug = $slug;
-        $article->category_id = $request->category_id;
         $article->cover_image = "noimage.jpg";
         $article->is_draft = 1; // 0 = False , 1 = True
         $article->save();
@@ -113,7 +115,7 @@ class ArticleController extends Controller
      */
     public function show($slug)
     {
-        $article = Article::where('slug', $slug)->with('category','user')->get();
+        $article = Article::where('slug', $slug)->with('user')->get();
         Article::where('slug',$slug)->increment('visit_count');
         if (count($article) == 0){
             return response()->json(['message' => 'Story not found'], 404);
@@ -122,24 +124,6 @@ class ArticleController extends Controller
         return response()->json(['article'=>$article, 'current_user' => auth()->user()], 200);
     }
 
-    public function getCategory($id){
-
-    }
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    public function editDraft($id)
-    {
-
-    }
 
     /**
      * Update the specified resource in storage.
@@ -155,12 +139,22 @@ class ArticleController extends Controller
             "body"=>"required"
         ]);
 
-        $article = Article::where('slug', $slug)->first();
-        $article->title = $request->title;
-        $article->body = $request->body;
-        $article->save();
-        
-        return "Article updated.";
+        if (Auth::check()){
+
+            $article = Article::where('slug', $slug)->first();
+            if ($article->user_id == Auth::user()->id || Auth::user()->name == "admin"){
+                $article->title = $request->title;
+                $article->body = $request->body;
+                $article->save();
+                
+                return response()->json(["message" => "Story sucessfully updated"], 202);
+            } else {
+                return response()->json(['message' => "Story not found"], 404);
+            }   
+        } else if (!Auth::check()) {
+            return response()->json(['message' => "Unauthorized"], 401);
+        }
+        return response()->json(['message' => "Oops, something has gone wrong"], 500);
     }
 
     /**

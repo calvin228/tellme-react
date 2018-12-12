@@ -50,4 +50,14 @@ class CommentController extends Controller
         }
     }
 
+    public function update(Request $request, $id){
+        if (Auth::check()){
+            $comment = Comment::find($id);
+            if ($comment->user_id == Auth::user()->id){
+                $comment->comment = $request->comment;
+                $comment->save();
+                return response()->json(["message"=>"Comment successfully updated"], 202);
+            }
+        }
+    }
 }

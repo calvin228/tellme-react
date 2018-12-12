@@ -5,6 +5,7 @@ import CreateStory from "./CreateStory";
 import CreateForum from "./CreateForum";
 import axios from "axios";
 import PageWrapper from "./PageWrapper";
+import PageTitle from "./PageTitle";
 import { EditorState } from "draft-js";
 
 export default class Home extends Component {
@@ -131,7 +132,6 @@ export default class Home extends Component {
                 }
             })
             .then(response => {
-                console.log(response.data);
                 this.handleToggleForumModal();
             })
             .catch(error => console.log(error));
@@ -165,6 +165,7 @@ export default class Home extends Component {
     render() {
         return (
             <PageWrapper stories={this.state.stories}>
+                <PageTitle title="Home - TellMe"/>
                 <Header
                     toggleStoryModal={this.handleToggleStoryModal}
                     toggleForumModal={this.handleToggleForumModal}

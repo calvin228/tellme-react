@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Topic;
+use App\Post;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,7 @@ class TopicController extends Controller
      */
     public function index()
     {
-        $topics = Topic::with('user','post')->get();
+        $topics = Topic::with('user','post')->orderBy('created_at', 'desc')->get();
 
         return response()->json($topics , 200);
     }
@@ -50,6 +51,7 @@ class TopicController extends Controller
             $topic->category_id = $request->category_id;
             $topic->is_closed = 0; //0 = True, 1 = False
             $topic->user_id = Auth::user()->id;
+            $topic->visit_count = 0;
             $topic->save();
 
             return response()->json(['message' => 'Topic successfully saved', "topic" => $topic], 201);
@@ -67,7 +69,7 @@ class TopicController extends Controller
     {
     
         $topic = Topic::where('id',$id)->with('user')->get();
-
+        Topic::where('id',$id)->increment('visit_count');
         return response()->json(["topic"=>$topic], 200);
     }
 
@@ -91,7 +93,7 @@ class TopicController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        
     }
 
     /**
@@ -102,6 +104,17 @@ class TopicController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (Auth::check()){
+            $topic = Topic::find($id);
+            if ($topic->user_id == Auth::user()->id){
+                $topic->delete();
+                return response()->json(["message"=>"Topic deleted"], 202);
+            }
+        } else if (Auth::check()){
+            return response()->json(["message"=>"Unauthorized"], 401);
+        }
+
+        return response()->json(['message' => "Oops, something has gone wrong"], 500);
     }
+
 }

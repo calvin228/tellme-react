@@ -2,7 +2,7 @@ import React from "react";
 import _ from "lodash";
 import { Link } from "react-router-dom";
 
-const MostVisitedItem = props => {
+const StoryItem = props => {
     return (
         <div className="media">
             <div className="media-left">
@@ -33,8 +33,43 @@ const MostVisitedItem = props => {
         </div>
     );
 };
+
+
+const ForumItem = props => {
+    const { forum } = props
+    return (
+        <div className="media">
+            <div className="media-left">
+                <figure className="image is-64x64">
+                    <img
+                        className="is-small-radius"
+                        src={
+                            forum.user
+                                ? `/api/image/profile/${forum.user.profile_image}`
+                                : "https://bulma.io/images/placeholders/96x96.png"
+                        }
+                    />
+                </figure>
+            </div>
+            <div className="media-content">
+                <div className="content">
+                    <Link
+                        to={`/forum/${forum ? forum.id : ""}`}
+                    >
+                        <strong style={{ color: "#3c3c3c" }}>
+                            {forum ? forum.subject : ""}
+                        </strong>
+                    </Link>
+                    <br />
+                    By : {forum ? forum.user.name : ""}
+                </div>
+            </div>
+        </div>
+    );
+};
+
 const MostVisited = props => {
-    const { stories } = props;
+    const { stories,forums } = props;
     return (
         <div className="column is-one-third">
             <div className="box">
@@ -44,11 +79,11 @@ const MostVisited = props => {
                     {/* <div className="scrollable-medium"> */}
                     <div>
                         {_.orderBy(
-                            stories.slice(0, 4),
+                            stories,
                             ["visit_count"],
                             ["desc"]
-                        ).map(story => {
-                            return <MostVisitedItem key={story.id} story={story} />;
+                        ).slice(0,4).map(story => {
+                            return <StoryItem key={story.id} story={story} />;
                         })}
                     </div>
                 </div>
@@ -58,11 +93,11 @@ const MostVisited = props => {
                     {/* <div className="scrollable-medium"> */}
                     <div>
                         {_.orderBy(
-                            stories.slice(0, 4),
+                            forums,
                             ["visit_count"],
                             ["desc"]
-                        ).map(story => {
-                            return <MostVisitedItem key={story.id} story={story} />;
+                        ).slice(0,4).map(forum => {
+                            return <ForumItem key={forum.id} forum={forum} />;
                         })}
                     </div>
                 </div>

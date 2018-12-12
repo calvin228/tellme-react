@@ -8,12 +8,13 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
-
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <link href="{{asset('css/app.css')}}" type="text/css" rel="stylesheet"/>
     </head>
     <body>
         <div id="app"></div>
         <script src="{{asset('js/app.js')}}"></script>
+        
         <script>
             document.addEventListener('DOMContentLoaded', () => {
 
@@ -41,5 +42,6 @@
               
               });
         </script>
+        
     </body>
 </html>

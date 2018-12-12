@@ -37,6 +37,7 @@ export default class LoginForm extends Component {
         };
         this.handleFieldChange = this.handleFieldChange.bind(this);
         this.handleLogin = this.handleLogin.bind(this);
+        this.handleToggleLoading = this.handleToggleLoading.bind(this);
     }
 
     handleFieldChange(event) {
@@ -45,26 +46,29 @@ export default class LoginForm extends Component {
         });
     }
 
+    handleToggleLoading(){
+        this.setState({
+            isLoading: !this.state.isLoading
+        })
+    }
     handleLogin(event) {
         event.preventDefault();
         const { email, password } = this.state;
-        this.setState({
-            isLoading: true
-        });
+        this.handleToggleLoading()
         axios
             .post("/api/login", { email, password })
             .then(response => {
+                this.handleToggleLoading()
                 sessionStorage.setItem("jwtToken", response.data.token);
-                this.setState({
-                    isLoading: false,
-                    error:"",
-                    redirectToReferrer: true
-                });
+                window.location.replace("/");
+                // this.setState({
+                //     error:"",
+                //     redirectToReferrer: true
+                // });
+                
             })
             .catch(error => {
-                this.setState({
-                    isLoading: false
-                });
+                this.handleToggleLoading()
                 if (error.response.status === 401){
                     this.setState({
                         error: "Invalid username / password!"
@@ -92,10 +96,10 @@ export default class LoginForm extends Component {
                     <form onSubmit={this.handleLogin}>
                         <Email handleFieldChange={this.handleFieldChange} />
                         <Password handleFieldChange={this.handleFieldChange} />
-                        <RememberMe
+                        {/* <RememberMe
                             value={this.state.remember_me}
                             handleFieldChange={this.state.handleFieldChange}
-                        />
+                        /> */}
                         <LoginButton isLoading={this.state.isLoading} />
                     </form>
                 </div>
@@ -108,7 +112,7 @@ export default class LoginForm extends Component {
                 </p>
                 <br />
                 <p>
-                    <a href="#">Forgot password</a>
+                    <a href="/password/reset">Forgot password</a>
                 </p>
             </AuthWrapper>
         );

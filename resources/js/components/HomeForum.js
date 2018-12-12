@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PageWrapper from "./PageWrapper";
 import ForumLists from "./ForumLists";
+import PageTitle from "./PageTitle";
 
 export default class HomeForum extends Component {
     constructor() {
@@ -24,6 +25,7 @@ export default class HomeForum extends Component {
     render() {
         return (
             <PageWrapper>
+                <PageTitle title="Forum - TellMe"/>
                 <ForumLists topics={this.state.topics}/>
             </PageWrapper>
         );

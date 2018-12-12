@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
 import { NavLink, Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import SearchBar from "./SearchBar";
 
 export default class Navbar extends Component {
     constructor() {
@@ -9,6 +9,7 @@ export default class Navbar extends Component {
             isAuthenticated: false,
             user: {}
         };
+        this.handleLogout = this.handleLogout.bind(this);
     }
 
     checkAuthentication() {
@@ -28,6 +29,21 @@ export default class Navbar extends Component {
                     });
                 });
         }
+    }
+
+    handleLogout() {
+        axios
+            .get("/api/logout", {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem(
+                        "jwtToken"
+                    )}`
+                }
+            })
+            .then(() => {
+                sessionStorage.removeItem("jwtToken");
+                window.location.reload();
+            });
     }
     componentDidMount() {
         this.checkAuthentication();
@@ -64,42 +80,48 @@ export default class Navbar extends Component {
                             <NavLink to="/forum" className="navbar-item">
                                 Forum
                             </NavLink>
-                            <a className="navbar-item">About</a>
+                            <NavLink to="/about" className="navbar-item">
+                                About
+                            </NavLink>
                         </div>
                         {/* change this below when user logged in */}
                         <div className="navbar-end">
-                            <div className="navbar-item">
-                                <span style={{"display":'flex'}}>
-                                    <FontAwesomeIcon
-                                        icon="search"
-                                        size="2x"
-                                        className="mg-right-2"
-                                    />
-                                    <div className="field">
-                                        <div className="control">
-                                            <input
-                                                className="input"
-                                                type="text"
-                                                placeholder="Search..."
-                                            />
-                                        </div>
-                                    </div>
-                                </span>
-                            </div>
+                            {this.props.hideSearch ? (
+                                ""
+                            ) : (
+                                <SearchBar
+                                    handleSearchResult={
+                                        this.props.handleSearchResult
+                                    }
+                                />
+                            )}
 
-                            <div className="navbar-item">
-                                {this.state.isAuthenticated ? (
-                                    <Link
-                                        to={`/profile/${this.state.user.slug}`}
-                                    >
-                                        <img
-                                            className="img-rounded"
-                                            src={`/api/image/profile/${
-                                                this.state.user.profile_image
+                            {this.state.isAuthenticated ? (
+                                <Fragment>
+                                    <div className="navbar-item">
+                                        <Link
+                                            to={`/profile/${
+                                                this.state.user.slug
                                             }`}
-                                        />
-                                    </Link>
-                                ) : (
+                                        >
+                                            <img
+                                                className="img-rounded"
+                                                src={`/api/image/profile/${
+                                                    this.state.user
+                                                        .profile_image
+                                                }`}
+                                            />
+                                        </Link>
+                                    </div>
+                                    <div
+                                        className="navbar-item pointer"
+                                        onClick={this.handleLogout}
+                                    >
+                                        <a className="has-text-white">Logout</a>
+                                    </div>
+                                </Fragment>
+                            ) : (
+                                <div className="navbar-item">
                                     <div className="buttons">
                                         <a className="button is-primary">
                                             <strong>Sign up</strong>
@@ -108,11 +130,8 @@ export default class Navbar extends Component {
                                             Log in
                                         </a>
                                     </div>
-                                )}
-                            </div>
-                            {/* <div className="navbar-item">
-                                
-                            </div> */}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </nav>

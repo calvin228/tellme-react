@@ -39,16 +39,18 @@ export default class RegisterForm extends Component {
         });
     }
     handleRegister(event) {
+        console.log(this.profile_img);
         event.preventDefault();
         const { name, email, password, password_confirmation } = this.state;
-        console.log(this.profile_img);
         let data = new FormData();
         data.append("name", name);
         data.append("email", email);
         data.append("password", password);
         data.append("password_confirmation", password_confirmation);
-        data.append("profile_image", this.profile_img);
-
+        if (this.profile_img !== undefined){
+            data.append("profile_image", this.profile_img);
+        }
+        
         axios
             .post("/api/register", data)
             .then(response => {

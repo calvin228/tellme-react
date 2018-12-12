@@ -27,15 +27,18 @@ Route::group(['middleware'=>'auth:api'], function(){
     // if error shown Route[login] undefined, means unauthorized because of middleware auth;
 });
 
-Route::get('user/{slug}', 'UserController@user_info');
 
+Route::get('user/{slug}', 'UserController@user_info');
+Route::put('user/update', 'UserController@update')->middleware("auth:api");
+Route::put('user/update/image', "UserController@updateProfileImage")->middleware('auth:api');
+// Route::get('password/reset/{token?}', "Auth")
 // Articles Route
 
 Route::get('articles', 'ArticleController@index');
 Route::group(['middleware'=>'auth:api'], function(){
 	Route::post('articles', 'ArticleController@store'); 
 });
-Route::put('articles/edit/{slug}', 'ArticleController@update');
+Route::put('articles/{slug}/update', 'ArticleController@update')->middleware('auth:api');
 Route::delete('articles/delete/{id}', 'ArticleController@destroy')->middleware('auth:api');
 Route::post('articles/draft/create', 'ArticleController@createDraft');
 Route::put('articles/draft/edit/{id}', 'ArticleController@editDraft');
@@ -54,7 +57,7 @@ Route::get('comments/{slug}', "CommentController@index");
 Route::post('comment/create', 'CommentController@store')->middleware('auth:api');
 Route::get('comments/{slug}/count', "CommentController@countComment");
 Route::delete('comment/{id}/delete', "CommentController@destroy")->middleware('auth:api');
-
+Route::put('comment/{id}/update', "CommentController@update")->middleware('auth:api');
 // Like Route
 Route::post('like/{slug}', "LikeController@like")->middleware('auth:api');
 Route::delete('dislike/{slug}', "LikeController@dislike")->middleware('auth:api');
@@ -64,8 +67,15 @@ Route::get('like/{slug}/count', "LikeController@countLike");
 Route::get('topics', "TopicController@index");
 Route::post('topic/create', "TopicController@store")->middleware('auth:api');
 Route::get('topics/{id}', "TopicController@show");
+Route::put('topics/{id}/update', "TopicController@update")->middleware('auth:api');
+Route::delete('topics/{id}/delete', "TopicController@destroy")->middleware("auth:api");
 
-Route::get('posts/{topic_id}', "PostController@index");
-Route::post('post/{topic_id}/create/', "PostController@store")->middleware('auth:api'); // why doesnt accept param topic id?
-
+Route::get('posts/{topic_id}', "PostController@index")->middleware('auth:api');
+Route::post('post/{topic_id}/create', "PostController@store")->middleware('auth:api'); // why doesnt accept param topic id?
+Route::delete('post/{id}/delete', "PostController@destroy")->middleware('auth:api');
+Route::put('post/{id}/update', "PostController@update")->middleware('auth:api');
 //Note : middleware auth is required to do authentication 
+
+//Search Route
+Route::get('search', "SearchController@search");
+

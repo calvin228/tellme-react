@@ -17,7 +17,8 @@ class PostController extends Controller
     public function index($topic_id)
     {
         $posts = Post::where('topic_id', $topic_id)->with('user')->get();
-        return response()->json($posts, 200);
+        $current_user = Auth::user();
+        return response()->json(["post"=>$posts, "current_user"=>$current_user], 200);
     }
 
     /**
@@ -85,7 +86,16 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if(Auth::check()){
+            $post = Post::find($id);
+            if($post == null){
+                return response()->json(['message'=>"Post not found"], 404);
+            } else {
+                $post->content = $request->content;
+                $post->save();
+                return response()->json(['message' => 'Post successfully updated'], 202);
+            }
+        }
     }
 
     /**
@@ -96,6 +106,12 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (Auth::check()){
+            $post = Post::find($id);
+            if ($post->user_id == Auth::user()->id){
+                $post->delete();
+                return response()->json(["message"=>"Reply deleted"], 202);
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
 import React from "react";
 
 const InputField = props => {
+
     return (
         <div className="field is-horizontal">
             <div className="field-label is-normal">
@@ -11,12 +12,12 @@ const InputField = props => {
                     <div className="control">
                         <input
                             className="input"
-                            type="text"
+                            type={props.type}
                             name={props.name}
                             placeholder={props.placeholder}
                             onChange={props.onChange}
                             value={props.value}
-
+                            disabled={props.disabled ? true : false}
                         />
                     </div>
                 </div>

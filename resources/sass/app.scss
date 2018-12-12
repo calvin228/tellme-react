@@ -54,6 +54,7 @@
 // 	margin-bottom: 10px;
 // }
 
+
 @import "~bulma/sass/utilities/initial-variables";
 @import "~bulma/sass/utilities/functions";
 
@@ -62,6 +63,10 @@
 @import "~bulma/sass/utilities/derived-variables";
 
 @import "~bulma/bulma.sass";
+
+
+@import "~bulma-extensions/bulma-tooltip/dist/css/bulma-tooltip";
+
 .navbar-item img {
     max-height: 2.75rem;
 }
@@ -77,6 +82,9 @@ hr {
     background-color: #dcdcdc !important;
 }
 
+.center{
+    margin: 0 auto;
+}
 .between-line {
     width: 100%;
     height: 20px;
@@ -139,6 +147,10 @@ body {
     margin-top: -30px;
 }
 
+.remove-border-top{
+    border-top: none;
+}
+
 .padding-none{
     padding: 0;
 }
@@ -149,6 +161,9 @@ body {
     padding: 2vw;
 }
 
+.padding-small-05{
+    padding: 0.5vw;
+}
 .margin-small {
     margin: 1vw;
 }
@@ -159,7 +174,16 @@ body {
 .mg-top-4 {
     margin-top: 4vh;
 }
+.mg-top-6 {
+    margin-top: 6vh;
+}
 
+.mg-lr-5{
+    margin: 0 5vw;
+}
+.mg-btm-4{
+    margin-bottom: 4vh;
+}
 .mg-right-1 {
     margin-right: 1vh;
 }
@@ -226,50 +250,23 @@ a.text-black{
     }
 }
 
-@mixin nth-children($points...) {
-    @each $point in $points {
-        &:nth-child(#{$point}) {
-            @content;
-        }
+.hover-primary{
+    font-size: 14px;
+    color: rgba(10, 10, 10, 0.2);
+    // padding-top: -20px;
+    margin: 5px;
+    vertical-align: top;
+    &:hover{
+        color:rgba(10, 10, 10, 0.3);
+        // background: #0bbcd3; 
     }
 }
 
-.text-input__loading {
-    height: 214px;
-    border: 1px solid lightgrey;
-    border-radius: 4px;
-    width: 100%;
-
-    &--line {
-        height: 10px;
-        margin: 10px;
-        animation: pulse 1s infinite ease-in-out;
-    }
-
-    div {
-        @include nth-children(1, 5, 9) {
-            width: 150px;
-        }
-        @include nth-children(2, 6, 10) {
-            width: 250px;
-        }
-        @include nth-children(3, 7) {
-            width: 50px;
-        }
-        @include nth-children(4, 8) {
-            width: 100px;
-        }
-    }
+.avatar{
+    background: #fff;
+    border-radius: 50%;
+    border: 5px solid white;
+    -webkit-box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
+    box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
 }
 
-@keyframes pulse {
-    0% {
-        background-color: rgba(165, 165, 165, 0.1)
-    }
-    50% {
-        background-color: rgba(165, 165, 165, 0.3)
-    }
-    100% {
-        background-color: rgba(165, 165, 165, 0.1)
-    }
-}

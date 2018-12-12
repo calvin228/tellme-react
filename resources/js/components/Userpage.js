@@ -1,59 +1,104 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
+import Navbar from "./Navbar";
+import { Link } from "react-router-dom";
 
+const ProfileListItem = ({label, content}) => {
+
+    return (
+        <div className="media remove-border-top">
+            <div className="media-content padding-small-05">
+                <p>
+                    <strong className="has-text-primary">{label} : </strong>
+                </p>
+                <p>{content}</p>
+            </div>
+        </div>
+    );
+};
 export default class Userpage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: {}
-        }
+            user: {},
+            currentUser: {}
+        };
     }
 
-    componentDidMount() {
-        axios.get(`/api/user/${this.props.match.params.slug}`).then(response => {
-			this.setState({
+    fetchUser(){
+        axios
+        .get(`/api/user/${this.props.match.params.slug}`)
+        .then(response => {
+            this.setState({
                 user: response.data.user
+            });
+            document.title = this.state.user.name + " - TellMe";
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
+    fetchCurrentUser(){
+        axios.get('/api/user', {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem(
+                    "jwtToken"
+                )}`
+            }
+        })
+        .then(response => {
+
+            this.setState({
+                currentUser: response.data.user
             })
-		}).catch(error => {
-			console.log(error);
-		})
+        })
+    }
+    componentDidMount() {
+        this.fetchUser();
+        this.fetchCurrentUser();    
     }
 
     render() {
-        const { user } = this.state;
-        return (
-            <section className="section is-paddingless-horizontal">
-                <div className="container grid">
-                    <div className="columns">
-                        <div className="column">
-                            <figure class="image is-128x128">
-                                <img
-                                    className="is-rounded"
-                                    src={user.profile_image ? `/api/image/profile/${user.profile_image}` : "https://bulma.io/images/placeholders/128x128.png"}
-                                />
-                            </figure>
-                        </div>
-                        <div className="column is-four-fifths">
-                            <h1 className="title is-3">{user.name}</h1>
-                            <h2 className="subtitle is-5 has-text-grey-light">
-                                {user.description}
-                            </h2>
-                        </div>
-                    </div>
+        const { user, currentUser } = this.state;
 
-                    <div className="content">
-                        <div className="border-bottom margin-bottom">
-                            <h3>Published articles</h3>
+        return (
+            <Fragment>
+                <Navbar hideSearch={true}/>
+                <section className="section is-paddingless-horizontal">
+                    <div className="container grid">
+                        <div className="columns">
+                            <div className="column">
+                                <figure className="image is-square center">
+                                    <img
+                                        className="is-rounded avatar"
+                                        src={
+                                            user.profile_image
+                                                ? `/api/image/profile/${
+                                                      user.profile_image
+                                                  }`
+                                                : "https://bulma.io/images/placeholders/128x128.png"
+                                        }
+                                    />
+                                </figure>
+                                {currentUser.id === user.id ? <Link
+                                    className="button is-primary is-fullwidth mg-top-4"
+                                    to="/me/edit"
+                                >
+                                    Edit Profile
+                                </Link> : null}
+                                
+                            </div>
+                            <div className="column is-four-fifths">
+                                <h1 className="has-text-centered is-3 title">My Profile</h1>
+                                <div className="box">
+                                    <ProfileListItem label="Name" content={user.name}/>
+                                    <ProfileListItem label="Email" content={user.email}/>
+                                    <ProfileListItem label="Short Bio" content={user.description}/>
+                                </div>
+                            </div>
                         </div>
-                        <ul className="list-group">
-                            <li>
-                                <a className="panel-block">
-                                    How to dance like crazy
-                                </a>
-                            </li>
-                        </ul>
                     </div>
-                </div>
-            </section>
+                </section>
+            </Fragment>
         );
     }
 }

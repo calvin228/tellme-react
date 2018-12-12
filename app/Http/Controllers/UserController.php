@@ -25,7 +25,7 @@ class UserController extends Controller
             $imageName = str_slug($request->name) . "-" . time() . '.' . $request->profile_image->getClientOriginalExtension();
             $request->profile_image->storeAs(('public\profile_images'), $imageName);
         } else {
-            $imageName = "noimage.png";
+            $imageName = "no-profile-image.png";
         }
 
         $user = new User;
@@ -63,6 +63,22 @@ class UserController extends Controller
         }
     }
 
+    public function updateProfileImage(Request $request){
+        if (Auth::check()){
+            $user = User::find(Auth::user()->id);
+            if ($request->profile_image) {
+                $imageName = str_slug($request->name) . "-" . time() . '.' . $request->profile_image->getClientOriginalExtension();
+                $request->profile_image->storeAs(('public\profile_images'), $imageName);
+            } else {
+                $imageName = "noimage.png";
+            }
+            $user->profile_image = $imageName;
+            $user->save();
+
+            return response()->json(['message'=>"Image successfully updated"], 202);
+        } 
+
+    }
     public function logout(Request $request)
     {
         $request->user()->token()->revoke();
@@ -77,6 +93,27 @@ class UserController extends Controller
             return response()->json(['user' => auth()->user()], 200);
         }
 
+    }
+
+    public function update(Request $request){
+        $this->validate($request, [
+            'name'=>'required',
+            'email'=>'required',
+            'description'=>'nullable'
+        ]);
+
+        if (Auth::check()){
+            $user = User::find(Auth::user()->id);
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->description = $request->description;
+            $user->save();
+            
+            return response()->json(["message" => "Profile updated succeed"], 200);
+        } else {
+        	return "Error";
+        }
+                
     }
 
     public function user_info($slug){

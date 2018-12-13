@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { NavLink, Link } from "react-router-dom";
 import SearchBar from "./SearchBar";
+import logo from "../../../public/img/tellmelogo.png";
 
 export default class Navbar extends Component {
     constructor() {
@@ -58,7 +59,9 @@ export default class Navbar extends Component {
                     aria-label="main navigation"
                 >
                     <div className="navbar-brand">
-                        <a className="navbar-item" href="https://bulma.io" />
+                    <a className="navbar-item no-hover" href="/">
+                        <img src={logo} width="80" height="50"/>
+                    </a>
                         <a
                             role="button"
                             className="navbar-burger burger"

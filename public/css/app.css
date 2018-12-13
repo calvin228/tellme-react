@@ -13499,6 +13499,10 @@ label.panel-block:hover {
   max-height: 2.75rem;
 }
 
+.no-hover:hover {
+  background: #0bbcd3;
+}
+
 html {
   font-size: 15px;
 }
@@ -13578,6 +13582,7 @@ html,
 body {
   margin: 0;
   height: 100%;
+  background: #f6f7f6;
 }
 
 .reduce-mg-top-30 {

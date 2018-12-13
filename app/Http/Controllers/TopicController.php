@@ -43,13 +43,11 @@ class TopicController extends Controller
         if (Auth::check()) {
             $this->validate($request, [
                 'subject' => 'required',
-                'category_id' => 'required',
             ]);
 
             $topic = new Topic;
             $topic->subject = $request->subject;
-            $topic->category_id = $request->category_id;
-            $topic->is_closed = 0; //0 = True, 1 = False
+            // $topic->is_closed = 0; //0 = True, 1 = False
             $topic->user_id = Auth::user()->id;
             $topic->visit_count = 0;
             $topic->save();

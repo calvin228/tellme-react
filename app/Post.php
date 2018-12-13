@@ -10,6 +10,8 @@ class Post extends Model
 
     protected $primaryKey = 'id';
 
+    protected $fillable = ['content','topic_id','user_id'];
+
     public function user(){
         return $this->belongsTo('App\User');
     }

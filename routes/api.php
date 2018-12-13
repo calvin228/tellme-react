@@ -29,20 +29,25 @@ Route::group(['middleware'=>'auth:api'], function(){
 
 
 Route::get('user/{slug}', 'UserController@user_info');
-Route::put('user/update', 'UserController@update')->middleware("auth:api");
-Route::put('user/update/image', "UserController@updateProfileImage")->middleware('auth:api');
+Route::group(['middleware'=>'auth:api'], function(){
+    Route::put('user/update', 'UserController@update');
+    Route::put('user/update/image', "UserController@updateProfileImage");
+    Route::put('user/update/password', "UserController@updatePassword");
+});
 // Route::get('password/reset/{token?}', "Auth")
 // Articles Route
 
 Route::get('articles', 'ArticleController@index');
 Route::group(['middleware'=>'auth:api'], function(){
-	Route::post('articles', 'ArticleController@store'); 
+    Route::post('articles', 'ArticleController@store');
+    Route::put('articles/{slug}/update', 'ArticleController@update');
+    Route::delete('articles/delete/{id}', 'ArticleController@destroy'); 
+    Route::get('articles/{slug}', 'ArticleController@show');
 });
-Route::put('articles/{slug}/update', 'ArticleController@update')->middleware('auth:api');
-Route::delete('articles/delete/{id}', 'ArticleController@destroy')->middleware('auth:api');
+
 Route::post('articles/draft/create', 'ArticleController@createDraft');
 Route::put('articles/draft/edit/{id}', 'ArticleController@editDraft');
-Route::get('articles/{slug}', 'ArticleController@show')->middleware('auth:api');
+
 
 // Category Route
 Route::get('categories', 'CategoryController@index');
@@ -55,14 +60,12 @@ Route::get('image/{category}/{image}', 'ImageController@image_show');
 // Comment Route
 Route::get('comments/{slug}', "CommentController@index");
 Route::post('comment/create', 'CommentController@store')->middleware('auth:api');
-Route::get('comments/{slug}/count', "CommentController@countComment");
 Route::delete('comment/{id}/delete', "CommentController@destroy")->middleware('auth:api');
 Route::put('comment/{id}/update', "CommentController@update")->middleware('auth:api');
 // Like Route
 Route::post('like/{slug}', "LikeController@like")->middleware('auth:api');
 Route::delete('dislike/{slug}', "LikeController@dislike")->middleware('auth:api');
 Route::get('like/{slug}/check', "LikeController@checkLike")->middleware('auth:api');
-Route::get('like/{slug}/count', "LikeController@countLike");
 
 Route::get('topics', "TopicController@index");
 Route::post('topic/create', "TopicController@store")->middleware('auth:api');

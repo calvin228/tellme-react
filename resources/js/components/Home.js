@@ -110,6 +110,7 @@ export default class Home extends Component {
                 this.handleFetchStories();
                 this.handleToggleStoryModal();
                 this.handleResetField();
+                this.props.history.push(`/stories/${response.data.slug}`)
             })
             .catch(error => {
                 console.log(error.response);
@@ -133,6 +134,7 @@ export default class Home extends Component {
             })
             .then(response => {
                 this.handleToggleForumModal();
+                this.props.history.push(`/forum/${topic_id}`); 
             })
             .catch(error => console.log(error));
     }
@@ -140,8 +142,7 @@ export default class Home extends Component {
         event.preventDefault();
         const { subject, category } = this.state;
         const data = {
-            subject,
-            category_id: category
+            subject
         };
         this.toggleLoading();
         axios
@@ -154,7 +155,8 @@ export default class Home extends Component {
             })
             .then(response => {
                 this.toggleLoading();
-                this.handleCreatePost(response.data.topic.id);                
+                this.handleCreatePost(response.data.topic.id);  
+                             
             })
             .catch(error => console.log(error));
     }

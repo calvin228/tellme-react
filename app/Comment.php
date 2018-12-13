@@ -10,6 +10,8 @@ class Comment extends Model
 
     protected $primaryKey = 'id';
 
+    protected $fillable = ['comment','user_id','article_id','story_slug'];
+
     public function user(){
         return $this->belongsTo('App\User');
     }

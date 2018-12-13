@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import CurrentUser from "./subcomponents/CurrentUser";
 import InputField from "./subcomponents/InputField";
-import SelectField from "./subcomponents/SelectField";
 import TextAreaField from "./subcomponents/TextAreaField";
 import ButtonCreate from "./subcomponents/ButtonCreate";
 
@@ -47,12 +46,7 @@ export default class CreateForum extends Component {
                                 onChange={this.props.fieldChange}
                                 value={this.props.subject}
                                 placeholder="What is your subject?"
-                            />
-                            <SelectField
-                                label="Category"
-                                onChange={this.props.fieldChange}
-                                options={this.state.categories}
-                                name="category"
+                                required={true}
                             />
                             <TextAreaField 
                                 label="Content"
@@ -60,6 +54,7 @@ export default class CreateForum extends Component {
                                 placeholder="Write here..."
                                 onChange={this.props.fieldChange}
                                 value={this.props.content}
+                                required={true}
                             />
                             <ButtonCreate 
                                 type="submit"

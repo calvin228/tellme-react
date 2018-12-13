@@ -10,7 +10,6 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/page', "ArticleController@examplepage");
 Route::get('/password/reset', "Auth\ForgotPasswordController@showLinkRequestForm")->name('password.request');
 Route::post('/password/email', "Auth\ForgotPasswordController@sendResetLinkEmail")->name('password.email');
 Route::get('/password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
@@ -22,8 +21,5 @@ Route::get('/{path?}', function(){
     return view('index');
 } )->where('path', '.*');
 
-
-
-
-
+Auth::routes();
 

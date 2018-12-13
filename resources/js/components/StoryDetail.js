@@ -102,8 +102,8 @@ class Comment extends Component {
                             )}
                         </div>
                     </div>
-                    <div className="card-border-bottom is-marginless">
-                        <p className="break-line">
+                    <div className="card-border-bottom is-marginless ">
+                        <p className="break-line mg-btm-4">
                             {comment.comment}
                             <br />
                         </p>

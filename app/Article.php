@@ -10,7 +10,8 @@ class Article extends Model
 
     protected $primaryKey = 'id';
 
-    // protected $fillable = ['title','body','cover_image','slug']
+    protected $fillable = ['title','body','slug','user_id','visit_count'];
+
     public function category(){
         return $this->belongsTo('App\Category');
     }

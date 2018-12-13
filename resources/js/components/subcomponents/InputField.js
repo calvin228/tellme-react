@@ -18,6 +18,7 @@ const InputField = props => {
                             onChange={props.onChange}
                             value={props.value}
                             disabled={props.disabled ? true : false}
+                            required={props.required}
                         />
                     </div>
                 </div>

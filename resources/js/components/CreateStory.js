@@ -43,6 +43,7 @@ export default class CreateStory extends Component {
                                 onChange={this.props.fieldChange}
                                 value={this.props.title}
                                 placeholder="What is your title?"
+                                required={true}
                             />
                             <TextAreaField
                                 label="Body"
@@ -50,6 +51,7 @@ export default class CreateStory extends Component {
                                 placeholder="Write your story here..."
                                 onChange={this.props.fieldChange}
                                 value={this.props.body}
+                                required={true}
                             />
                             <ButtonCreate 
                                 type="submit"

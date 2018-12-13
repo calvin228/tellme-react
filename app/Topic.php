@@ -10,6 +10,8 @@ class Topic extends Model
 
     protected $primaryKey = 'id';
 
+    protected $fillable = ['subject','user_id','visit_count'];
+
     public function user(){
         return $this->belongsTo('App\User');
     }

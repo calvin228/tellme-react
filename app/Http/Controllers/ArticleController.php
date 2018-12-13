@@ -20,7 +20,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = Article::where('is_draft', 0)->with('user','comment', 'like')->orderBy('created_at', 'desc')->get();
+        $articles = Article::with('user','comment', 'like')->orderBy('created_at', 'desc')->get();
         return response()->json($articles, 200);
     }
 
@@ -42,33 +42,20 @@ class ArticleController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function examplepage(){
-        return view('page');
-    }
-
     public function store(Request $request)
     {
         if (Auth::check()){
             $this->validate($request, [
                 'title' => 'required',
                 'body' => 'required',
-                'cover_image' => 'image|nullable|max:1999'
             ]);
 
             $slug = $this->generateSlug($request->title);
 
-            if ($request->cover_image){
-                $image_name = str_slug($request->title)."-".time().".".$request->cover_image->getClientOriginalExtension();
-                $request->cover_image->storeAs(('public\cover_images'), $image_name);
-            } else {
-                $image_name = "noimage.jpg";
-            }
             $article = new Article;
             $article->title = $request->title;
             $article->body = $request->body;
             $article->slug = $slug;
-            $article->cover_image = $image_name;
-            $article->is_draft = 0; // 0 = False , 1 = True
             $article->user_id = Auth::user()->id;
             $article->visit_count = 0;
             $article->save();
@@ -86,26 +73,6 @@ class ArticleController extends Controller
         return $slug."-".$randomString;
     }
 
-    public function createDraft(Request $request)
-    {
-        $this->validate($request, [
-            'title' => 'required',
-            'body' => 'required',
-            //Space for 'cover_image'=>'image' (check if necessary)
-        ]);
-
-        $slug = $this->generateSlug($request->title);
-
-        $article = new Article;
-        $article->title = $request->title;
-        $article->body = $request->body;
-        $article->slug = $slug;
-        $article->cover_image = "noimage.jpg";
-        $article->is_draft = 1; // 0 = False , 1 = True
-        $article->save();
-
-        return $article;
-    }
 
     /**
      * Display the specified resource.

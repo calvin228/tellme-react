@@ -5,6 +5,7 @@ import AuthWrapper from "./AuthWrapper";
 import Email from "./form-components/Email";
 import Password from "./form-components/Password";
 import RememberMe from "./form-components/RememberMe";
+import PageTitle from "../PageTitle";
 
 const LoginButton = props => {
     return (
@@ -87,6 +88,7 @@ export default class LoginForm extends Component {
 
         return (
             <AuthWrapper>
+                <PageTitle title="Login - TellMe"/>
                 <h1 className="title">Login</h1>
                 <h2 className="subtitle">Please login to proceed</h2>
                 

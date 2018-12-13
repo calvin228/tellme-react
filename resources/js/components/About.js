@@ -1,48 +1,42 @@
 import React, { Fragment } from "react";
 import Navbar from "./Navbar";
 import PageTitle from "./PageTitle";
+import logo from "../../../storage/app/public/profile_images/no-profile-image.png";
 
 const Person = props => {
     return (
         <div className="column">
-            <div className="box">
-                <h1 className="title has-text-centered is-4">{props.name}</h1>
-                <figure className="image is-128x128 center">
+            <div className="box ">
+                <figure className="image is-128x128 center mg-top-4">
                     <img className="is-rounded" src={props.imgLink} />
                 </figure>
                 <br />
-                <h3 className="subtitle has-text-centered is-6">
-                    {props.role}
-                </h3>
+                <h1 className="title has-text-centered is-4 mg-btm-4">{props.name}</h1>
             </div>
         </div>
     );
 };
 
 const About = () => {
-    
     return (
         <Fragment>
-            <PageTitle title="About - TellMe"/>
-            <Navbar hideSearch={true}/>
+            <PageTitle title="About - TellMe" />
+            <Navbar hideSearch={true} />
             <section className="section has-background-light">
                 <div className="container">
                     <h1 className="title has-text-centered">About Tellme</h1>
                     <div className="columns mg-top-6">
                         <Person
                             name="Audian Taslim"
-                            role="Unknown"
-                            imgLink="https://bulma.io/images/placeholders/128x128.png"
+                            imgLink={logo}
                         />
                         <Person
                             name="Calvin Octa Wijaya"
-                            role="Unknown"
-                            imgLink="https://bulma.io/images/placeholders/128x128.png"
+                            imgLink={logo}
                         />
                         <Person
                             name="Jovita"
-                            role="Unknown"
-                            imgLink="https://bulma.io/images/placeholders/128x128.png"
+                            imgLink={logo}
                         />
                     </div>
                 </div>

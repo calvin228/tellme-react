@@ -79,6 +79,20 @@ class UserController extends Controller
         } 
 
     }
+
+    public function updatePassword(Request $request){
+        if (Auth::check()){
+            $user = User::find(Auth::user()->id);
+            if (Hash::check($request->password_old, $user->password)){
+                $user->password = Hash::make($request->password_new);
+                $user->save();
+
+                return response()->json(['password'=>$user->password], 200);
+            } else {
+                return response()->json(['message'=>"Wrong password"], 401);
+            }
+        }   
+    }
     public function logout(Request $request)
     {
         $request->user()->token()->revoke();
